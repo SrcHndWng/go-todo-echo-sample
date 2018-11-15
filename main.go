@@ -9,5 +9,5 @@ func main() {
 	e := echo.New()
 	e.POST("/todos", handlers.CreateTodo)
 	e.GET("/todos/:id", handlers.GetTodo)
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(":8080"))
 }
