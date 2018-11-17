@@ -7,6 +7,7 @@ import (
 
 func main() {
 	e := echo.New()
+	e.File("/", "templates/index.html")
 	e.POST("/todos", handlers.CreateTodo)
 	e.GET("/todos/:id", handlers.GetTodo)
 	e.Logger.Fatal(e.Start(":8080"))
