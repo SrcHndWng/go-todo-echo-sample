@@ -24,7 +24,7 @@
 
                 methods: {
                   showTodos: function() {
-                      this.$http.get('http://localhost:8080/todos').then(function(response) {
+                      this.$http.get('/todos').then(function(response) {
                           this.todos = response.data ? response.data : []
                       })
                   },
