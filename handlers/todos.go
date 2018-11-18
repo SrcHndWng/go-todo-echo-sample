@@ -15,7 +15,7 @@ type (
 )
 
 var (
-	todos = map[int]*todo{}
+	todos = make([]todo, 0)
 	seq   = 1
 )
 
@@ -27,13 +27,23 @@ func CreateTodo(c echo.Context) error {
 	if err := c.Bind(t); err != nil {
 		return err
 	}
-	todos[t.ID] = t
+	todos = append(todos, *t)
 	seq++
 	return c.JSON(http.StatusCreated, t)
+}
+
+// GetTodos Handler
+func GetTodos(c echo.Context) error {
+	return c.JSON(http.StatusOK, todos)
 }
 
 // GetTodo Handler
 func GetTodo(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
-	return c.JSON(http.StatusOK, todos[id])
+	for _, t := range todos {
+		if id == t.ID {
+			return c.JSON(http.StatusOK, t)
+		}
+	}
+	return c.JSON(http.StatusNotFound, nil)
 }

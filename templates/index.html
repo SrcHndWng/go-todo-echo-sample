@@ -1,10 +1,35 @@
 <html>
     <head>
+        <!-- Vue.js -->
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.7.0/vue-resource.min.js"></script>
     </head>
     <body>
         <div>
-            <h1>Hello Echo</h1>
-            <div>index.html</div>
+            <h1>Todo List</h1>
+            <button v-on:click="showTodos">Show Todos!</button>
+            <ul>
+                <li v-for="todo in todos">
+                    {{ todo.name }}
+                </li>
+            </ul>
         </div>
+        <script>
+            new Vue({
+                el: 'body',
+
+                data: {
+                    todos: [],
+                },
+
+                methods: {
+                  showTodos: function() {
+                      this.$http.get('http://localhost:8080/todos').then(function(response) {
+                          this.todos = response.data ? response.data : []
+                      })
+                  },
+                }
+            })
+        </script>
     </body>
 </html>
