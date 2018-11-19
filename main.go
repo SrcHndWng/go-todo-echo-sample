@@ -11,6 +11,6 @@ func main() {
 	e.POST("/todos", handlers.CreateTodo)
 	e.GET("/todos", handlers.GetTodos)
 	e.GET("/todos/:id", handlers.GetTodo)
-	e.PUT("/todo/:id", handlers.UpdateTodo)
+	e.PUT("/todos/:id", handlers.UpdateTodo)
 	e.Logger.Fatal(e.Start(":8080"))
 }
