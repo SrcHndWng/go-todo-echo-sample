@@ -2,48 +2,33 @@ package handlers
 
 import (
 	"net/http"
-	"strconv"
 
+	"github.com/SrcHndWng/go-todo-echo-sample/repository"
 	"github.com/labstack/echo"
-)
-
-type (
-	todo struct {
-		ID   int    `json:"id"`
-		Name string `json:"name"`
-	}
-)
-
-var (
-	todos = make([]todo, 0)
-	seq   = 1
 )
 
 // CreateTodo Handler
 func CreateTodo(c echo.Context) error {
-	t := &todo{
-		ID: seq,
-	}
-	if err := c.Bind(t); err != nil {
+	t, err := repository.AddTodo(c)
+	if err != nil {
 		return err
 	}
-	todos = append(todos, *t)
-	seq++
 	return c.JSON(http.StatusCreated, t)
 }
 
 // GetTodos Handler
 func GetTodos(c echo.Context) error {
-	return c.JSON(http.StatusOK, todos)
+	return c.JSON(http.StatusOK, repository.GetTodos())
 }
 
 // GetTodo Handler
 func GetTodo(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
-	for _, t := range todos {
-		if id == t.ID {
-			return c.JSON(http.StatusOK, t)
-		}
+	t, err := repository.GetTodo(c)
+	if err != nil {
+		return c.JSON(http.StatusExpectationFailed, nil)
 	}
-	return c.JSON(http.StatusNotFound, nil)
+	if t == nil {
+		return c.JSON(http.StatusNotFound, nil)
+	}
+	return c.JSON(http.StatusOK, t)
 }
