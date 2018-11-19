@@ -39,12 +39,8 @@ func GetTodo(c echo.Context) (*Todo, error) {
 	if err != nil {
 		return nil, err
 	}
-	for _, t := range todos {
-		if id == t.ID {
-			return &t, nil
-		}
-	}
-	return nil, nil
+	t := selectTodo(id)
+	return t, nil
 }
 
 func UpdateTodo(c echo.Context) (*Todo, error) {
