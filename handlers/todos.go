@@ -32,3 +32,12 @@ func GetTodo(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, t)
 }
+
+// UpdateTodo Handler
+func UpdateTodo(c echo.Context) error {
+	t, err := repository.UpdateTodo(c)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, nil)
+	}
+	return c.JSON(http.StatusOK, t)
+}

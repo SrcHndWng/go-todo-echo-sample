@@ -46,3 +46,23 @@ func GetTodo(c echo.Context) (*Todo, error) {
 	}
 	return nil, nil
 }
+
+func UpdateTodo(c echo.Context) (*Todo, error) {
+	t := new(Todo)
+	if err := c.Bind(t); err != nil {
+		return nil, err
+	}
+	id, _ := strconv.Atoi(c.Param("id"))
+	update := selectTodo(id)
+	update.Name = t.Name
+	return update, nil
+}
+
+func selectTodo(id int) *Todo {
+	for _, t := range todos {
+		if id == t.ID {
+			return &t
+		}
+	}
+	return nil
+}
