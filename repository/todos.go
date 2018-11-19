@@ -1,11 +1,5 @@
 package repository
 
-import (
-	"strconv"
-
-	"github.com/labstack/echo"
-)
-
 type (
 	Todo struct {
 		ID   int    `json:"id"`
@@ -18,40 +12,33 @@ var (
 	seq   = 1
 )
 
-func AddTodo(c echo.Context) (*Todo, error) {
+func NewTodo() *Todo {
 	t := &Todo{
 		ID: seq,
 	}
-	if err := c.Bind(t); err != nil {
-		return nil, err
-	}
-	todos = append(todos, *t)
 	seq++
-	return t, nil
+	return t
+}
+
+func AddTodo(t *Todo) {
+	todos = append(todos, *t)
 }
 
 func GetTodos() []Todo {
 	return todos
 }
 
-func GetTodo(c echo.Context) (*Todo, error) {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		return nil, err
-	}
-	t := selectTodo(id)
-	return t, nil
+func GetTodo(id int) *Todo {
+	return selectTodo(id)
 }
 
-func UpdateTodo(c echo.Context) (*Todo, error) {
-	t := new(Todo)
-	if err := c.Bind(t); err != nil {
-		return nil, err
-	}
-	id, _ := strconv.Atoi(c.Param("id"))
+func UpdateTodo(id int, t *Todo) *Todo {
 	update := selectTodo(id)
+	if update == nil {
+		return nil
+	}
 	update.Name = t.Name
-	return update, nil
+	return update
 }
 
 func selectTodo(id int) *Todo {

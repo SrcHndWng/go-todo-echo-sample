@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/SrcHndWng/go-todo-echo-sample/repository"
 	"github.com/labstack/echo"
@@ -9,10 +10,11 @@ import (
 
 // CreateTodo Handler
 func CreateTodo(c echo.Context) error {
-	t, err := repository.AddTodo(c)
-	if err != nil {
+	t := repository.NewTodo()
+	if err := c.Bind(t); err != nil {
 		return err
 	}
+	repository.AddTodo(t)
 	return c.JSON(http.StatusCreated, t)
 }
 
@@ -23,10 +25,11 @@ func GetTodos(c echo.Context) error {
 
 // GetTodo Handler
 func GetTodo(c echo.Context) error {
-	t, err := repository.GetTodo(c)
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return c.JSON(http.StatusExpectationFailed, nil)
+		return err
 	}
+	t := repository.GetTodo(id)
 	if t == nil {
 		return c.JSON(http.StatusNotFound, nil)
 	}
@@ -35,9 +38,17 @@ func GetTodo(c echo.Context) error {
 
 // UpdateTodo Handler
 func UpdateTodo(c echo.Context) error {
-	t, err := repository.UpdateTodo(c)
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, nil)
+		return err
 	}
-	return c.JSON(http.StatusOK, t)
+	t := new(repository.Todo)
+	if err := c.Bind(t); err != nil {
+		return err
+	}
+	update := repository.UpdateTodo(id, t)
+	if update == nil {
+		c.JSON(http.StatusNotFound, nil)
+	}
+	return c.JSON(http.StatusOK, update)
 }
