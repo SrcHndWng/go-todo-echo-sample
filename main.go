@@ -12,5 +12,6 @@ func main() {
 	e.GET("/todos", handlers.GetTodos)
 	e.GET("/todos/:id", handlers.GetTodo)
 	e.PUT("/todos/:id", handlers.UpdateTodo)
+	e.DELETE("/todos/:id", handlers.DeleteTodo)
 	e.Logger.Fatal(e.Start(":8080"))
 }

@@ -41,6 +41,25 @@ func UpdateTodo(id int, t *Todo) *Todo {
 	return update
 }
 
+func DeleteTodo(id int) int {
+	return removeToto(id)
+}
+
+func removeToto(id int) int {
+	match := -1
+	result := make([]Todo, 0)
+	for _, t := range todos {
+		if id == t.ID {
+			match = id
+		} else {
+			result = append(result, t)
+
+		}
+	}
+	todos = result
+	return match
+}
+
 func selectTodo(id int) *Todo {
 	for _, t := range todos {
 		if id == t.ID {

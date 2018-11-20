@@ -52,3 +52,16 @@ func UpdateTodo(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, update)
 }
+
+// DeleteTodo Handler
+func DeleteTodo(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return err
+	}
+	result := repository.DeleteTodo(id)
+	if result < 0 {
+		c.JSON(http.StatusNotFound, nil)
+	}
+	return c.JSON(http.StatusOK, nil)
+}
