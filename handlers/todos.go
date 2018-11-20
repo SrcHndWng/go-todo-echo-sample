@@ -31,7 +31,7 @@ func GetTodo(c echo.Context) error {
 	}
 	t := repository.GetTodo(id)
 	if t == nil {
-		return c.JSON(http.StatusNotFound, nil)
+		return c.NoContent(http.StatusNotFound)
 	}
 	return c.JSON(http.StatusOK, t)
 }
@@ -48,7 +48,7 @@ func UpdateTodo(c echo.Context) error {
 	}
 	update := repository.UpdateTodo(id, t)
 	if update == nil {
-		c.JSON(http.StatusNotFound, nil)
+		return c.NoContent(http.StatusNotFound)
 	}
 	return c.JSON(http.StatusOK, update)
 }
@@ -59,9 +59,9 @@ func DeleteTodo(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	result := repository.DeleteTodo(id)
-	if result < 0 {
-		c.JSON(http.StatusNotFound, nil)
+	todos := repository.DeleteTodo(id)
+	if todos == nil {
+		return c.NoContent(http.StatusNotFound)
 	}
-	return c.JSON(http.StatusOK, nil)
+	return c.JSON(http.StatusOK, todos)
 }
